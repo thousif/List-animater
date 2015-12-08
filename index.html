@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="reset.min.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="liststyle.css" type="text/css" media="screen"/>
+<link href='https://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
+<script src="https://code.jquery.com/jquery-1.4.4.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script>
+$(document).ready(function() {
+    $('li').click(function() {
+      // the clicked LI
+      var clicked = $(this);
+
+      // all the LIs above the clicked one
+      var previousAll = clicked.prevAll();
+
+      // only proceed if it's not already on top (no previous sibings)
+      if(previousAll.length > 0) {
+        // top LI
+        var top = $(previousAll[previousAll.length - 1]);
+
+        // immediately previous LI
+        var previous = $(previousAll[0]);
+
+        // how far up do we need to move the clicked LI?
+        var moveUp = clicked.attr('offsetTop') - top.attr('offsetTop');
+
+        // how far down do we need to move the previous siblings?
+        var moveDown = (clicked.offset().top + clicked.outerHeight()) - (previous.offset().top + previous.outerHeight());
+
+        // let's move stuff
+        clicked.css('position', 'relative');
+        previousAll.css('position', 'relative');
+        clicked.animate({'top': -moveUp});
+        previousAll.animate({'top': moveDown}, {complete: function() {
+          // rearrange the DOM and restore positioning when we're done moving
+          clicked.parent().prepend(clicked);
+          clicked.css({'position': 'static', 'top': 0});
+          previousAll.css({'position': 'static', 'top': 0}); 
+        }});
+      }
+    });
+  });
+</script>
+</head>
+<body>
+<section id="container">
+<article id="left">
+	<h1> list animation </h1>
+</article>
+<article id="right">
+<ul>
+ <li><a><i class="fa fa-user"></i> &nbsp;usopp<span>2</span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;teejay<span></span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;kakarot<span>12</span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;gotanks<span>4</span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;erza<span>1</span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;killua<span></span></a></li>
+ <li><a><i class="fa fa-user"></i> &nbsp;kakashi<span>7</span></a></li>
+</ul>
+</article>
+</section>
+</body>
+</html>
